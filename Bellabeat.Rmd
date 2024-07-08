@@ -1,0 +1,223 @@
+---
+title: "Case Study - Bellabeat data analysis"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+
+### About Bellabeat 
+
+Bellabeat, founded in 2013 by Urška Sršen and Sando Mur, is a wellness tech company creating beautifully designed smart products for women. Their devices track activity, sleep, stress, and reproductive health, empowering women with health insights. Bellabeat markets extensively online and via traditional media channels.
+
+###  Questions for Analysis
+
+1. What are some trends in smart device usage?
+2. How could these trends apply to Bellabeat customers?
+3. How could these trends help influence Bellabeat marketing strategy?
+
+
+### Business task
+
+Identify growth opportunities and provide recommendations to enhance Bellabeat's marketing strategy by analyzing trends in smart device usage.
+
+### Loading packages
+
+```{r}
+library(tidyverse)
+library(lubridate)
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+```
+
+### Importing datasets
+
+```{r}
+activity <- read.csv("dailyActivity_merged.csv")
+calories <- read.csv("hourlyCalories_merged.csv")
+intensities <- read.csv("hourlyIntensities_merged.csv")
+sleep <- read.csv("sleepDay_merged.csv")
+weight <- read.csv("weightLogInfo_merged.csv")
+```
+
+### Understanding datesets and types
+
+```{r}
+head(activity)
+head(calories)
+head(activity)
+head(sleep)
+```
+
+I spotted some problems with the time stamp data. So before analysis, I need to convert it to date time format and split to date and time.
+
+Intensities
+
+```{r}
+intensities$ActivityHour=as.POSIXct(intensities$ActivityHour, format="%m/%d/%Y %I:%M:%S %p", tz=Sys.timezone())
+intensities$time <- format(intensities$ActivityHour, format = "%H:%M:%S")
+intensities$date <- format(intensities$ActivityHour, format = "%m/%d/%y")
+head(intensities)
+```
+
+Calories
+
+```{r}
+calories$ActivityHour=as.POSIXct(calories$ActivityHour, format="%m/%d/%Y %I:%M:%S %p", tz=Sys.timezone())
+calories$time <- format(calories$ActivityHour, format = "%H:%M:%S")
+calories$date <- format(calories$ActivityHour, format = "%m/%d/%y")
+head(calories)
+```
+
+Activity
+
+```{r}
+activity$ActivityDate=as.POSIXct(activity$ActivityDate, format="%m/%d/%Y", tz=Sys.timezone())
+activity$date <- format(activity$ActivityDate, format = "%m/%d/%y")
+head(activity)
+```
+
+Sleep
+
+```{r}
+sleep$SleepDay=as.POSIXct(sleep$SleepDay, format="%m/%d/%Y %I:%M:%S %p", tz=Sys.timezone())
+sleep$date <- format(sleep$SleepDay, format = "%m/%d/%y")
+head(sleep)
+```
+
+### Exploring and summarizing data
+
+```{r}
+n_distinct(activity$Id)
+n_distinct(calories$Id)
+n_distinct(intensities$Id)
+n_distinct(sleep$Id)
+n_distinct(weight$Id)
+```
+
+
+The activity, calories, and intensities data sets include 33 participants, while the sleep data set has 24 participants. However, the weight data set consists of only 8 participants, which is insufficient to draw any reliable conclusions or make informed recommendations based on this data.
+
+### Summary statistics
+
+Activity
+
+```{r}
+activity %>%  
+  select(TotalSteps,
+         TotalDistance,
+         SedentaryMinutes, Calories) %>%
+  summary()
+```
+
+Number of active minutes per category
+
+```{r}
+activity %>%
+  select(VeryActiveMinutes, FairlyActiveMinutes, LightlyActiveMinutes) %>%
+  summary()
+```
+
+Calories
+
+```{r}
+calories %>%
+  select(Calories) %>%
+  summary()
+```
+
+Sleep
+
+```{r}
+sleep %>%
+  select(TotalSleepRecords, TotalMinutesAsleep, TotalTimeInBed) %>%
+  summary()
+```
+
+Weight
+
+```{r}
+weight %>%
+  select(WeightKg, BMI) %>%
+  summary()
+```
+
+Key findings from the summary include:
+
+- The average sedentary time is 991 minutes (16 hours), which needs to be reduced.
+- Most participants are lightly active.
+- On average, participants sleep once for 7 hours.
+- The average daily step count is 7,638, which is slightly below the threshold for health benefits. According to CDC research, taking 8,000 steps daily is linked to a 51% lower risk of all-cause mortality, while 12,000 steps daily reduces the risk by 65% compared to 4,000 steps.
+
+### Merging Data
+
+```{r}
+merged_data <- merge(sleep, activity, by=c('Id', 'date'))
+head(merged_data)
+```
+
+### Visualization
+
+```{r}
+ggplot(data=activity, aes(x=TotalSteps, y=Calories)) + 
+  geom_point(color='darkblue') + geom_smooth(color='darkcyan') + labs(title="Total Steps vs. Calories")
+```
+
+I observe a positive correlation between total steps and calories, which is expected – increased activity leads to higher calorie expenditure.
+
+```{r}
+ggplot(data=sleep, aes(x=TotalMinutesAsleep, y=TotalTimeInBed)) + 
+  geom_point(color='darkblue')+ geom_smooth(color='darkcyan') + 
+  labs(title="Total Minutes Asleep vs. Total Time in Bed")
+```
+
+The relationship between total minutes asleep and total time in bed appears linear. To help Bellabeat users improve their sleep, we should consider sending notifications to remind them to go to bed.
+
+```{r}
+int_new <- intensities %>%
+  group_by(time) %>%
+  drop_na() %>%
+  summarise(mean_total_int = mean(TotalIntensity))
+
+ggplot(data=int_new, aes(x=time, y=mean_total_int)) + geom_histogram(stat = "identity", fill='darkcyan') +
+  theme(axis.text.x = element_text(angle = 90)) +
+  labs(title="Average Total Intensity vs. Time")
+```
+
+After visualizing total intensity hourly, I discovered that people are more active between 5 AM and 10 PM. The peak activity period is between 5 PM and 7 PM, likely due to people going to the gym or for a walk after work. We can use this time in the Bellabeat app to send reminders and motivate users to go for a run or walk.
+
+```{r}
+ggplot(data=merged_data, aes(x=TotalMinutesAsleep, y=SedentaryMinutes)) + 
+  geom_point(color='darkblue') + geom_smooth(color='darkcyan') +
+  labs(title="Minutes Asleep vs. Sedentary Minutes")
+```
+
+We can observe a clear inverse correlation between Sedentary Minutes and Sleep Time. To enhance sleep quality, the Bellabeat app could suggest reducing sedentary behavior.
+
+### Recommendations for the business
+
+Based on our data collection on activity, sleep, stress, and reproductive health, Bellabeat has successfully empowered women by providing valuable insights into their health and habits. Since its establishment in 2013, Bellabeat has rapidly grown and established itself as a leading tech-driven wellness company focused on women's health. 
+
+Following an analysis of FitBit Fitness Tracker Data, I've identified key insights that can significantly impact Bellabeat's marketing strategy.
+
+### Target audience
+
+Our target audience includes individuals, particularly those working full-time jobs and spending extended periods at computers or in meetings, as indicated by our data on hourly intensity and sedentary time. These individuals engage in light activities for health maintenance, but they may benefit from guidance on enhancing their daily physical activity for greater health benefits. We aim our campaign towards all genders, assuming equal representation in our dataset.
+
+### Key message for the Bellabeat online campaign
+
+The core message of Bellabeat's online campaign is that our app goes beyond typical fitness applications. It serves as a supportive guide, empowering individuals—especially women—to achieve a balanced lifestyle by providing education and motivation through personalized daily recommendations.
+
+### Ideas for the Bellabeat app
+
+The average daily step count of 7,638 falls short of the CDC's recommended 10,000 steps for significant health benefits. Research shows that achieving 10,000 steps per day correlates with a 51% lower risk of all-cause mortality, with even greater benefits at 12,000 steps per day, associated with a 65% lower risk compared to 4,000 steps. Bellabeat can encourage users to reach at least 8,000 steps daily by highlighting these health advantages.
+
+For weight loss goals, monitoring daily calorie intake is essential. Bellabeat can suggest low-calorie lunch and dinner options to assist users in managing their caloric consumption effectively.
+
+To enhance sleep quality, Bellabeat could utilize app notifications to remind users of optimal bedtime routines.
+
+The peak activity period between 5 pm and 7 pm suggests that users may engage in exercise after work. Bellabeat can capitalize on this window to motivate and remind users to engage in physical activities like running or walking.
+
+As part of improving sleep, Bellabeat could recommend reducing sedentary time through its app.
+
