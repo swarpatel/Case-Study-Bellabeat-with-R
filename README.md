@@ -441,7 +441,7 @@ ggplot(data=activity, aes(x=TotalSteps, y=Calories)) +
 
     ## `geom_smooth()` using method = 'loess' and formula = 'y ~ x'
 
-![](Bellabeat_files/figure-markdown_github/unnamed-chunk-15-1.png)
+![](img/unnamed-chunk-15-1.png)
 
 I observe a positive correlation between total steps and calories, which
 is expected – increased activity leads to higher calorie expenditure.
@@ -454,7 +454,7 @@ ggplot(data=sleep, aes(x=TotalMinutesAsleep, y=TotalTimeInBed)) +
 
     ## `geom_smooth()` using method = 'loess' and formula = 'y ~ x'
 
-![](Bellabeat_files/figure-markdown_github/unnamed-chunk-16-1.png)
+![](img/unnamed-chunk-16-1.png)
 
 The relationship between total minutes asleep and total time in bed
 appears linear. To help Bellabeat users improve their sleep, we should
@@ -474,7 +474,7 @@ ggplot(data=int_new, aes(x=time, y=mean_total_int)) + geom_histogram(stat = "ide
     ## Warning in geom_histogram(stat = "identity", fill = "darkcyan"): Ignoring
     ## unknown parameters: `binwidth`, `bins`, and `pad`
 
-![](Bellabeat_files/figure-markdown_github/unnamed-chunk-17-1.png)
+![](img/unnamed-chunk-17-1.png)
 
 After visualizing total intensity hourly, I discovered that people are
 more active between 5 AM and 10 PM. The peak activity period is between
@@ -490,7 +490,7 @@ ggplot(data=merged_data, aes(x=TotalMinutesAsleep, y=SedentaryMinutes)) +
 
     ## `geom_smooth()` using method = 'loess' and formula = 'y ~ x'
 
-![](Bellabeat_files/figure-markdown_github/unnamed-chunk-18-1.png)
+![](img/unnamed-chunk-18-1.png)
 
 We can observe a clear inverse correlation between Sedentary Minutes and
 Sleep Time. To enhance sleep quality, the Bellabeat app could suggest
