@@ -55,101 +55,76 @@ weight <- read.csv("weightLogInfo_merged.csv")
 ### Understanding datesets and types
 
 ``` r
-head(activity)
+str(activity)
 ```
 
-    ##           Id ActivityDate TotalSteps TotalDistance TrackerDistance
-    ## 1 1503960366    4/12/2016      13162          8.50            8.50
-    ## 2 1503960366    4/13/2016      10735          6.97            6.97
-    ## 3 1503960366    4/14/2016      10460          6.74            6.74
-    ## 4 1503960366    4/15/2016       9762          6.28            6.28
-    ## 5 1503960366    4/16/2016      12669          8.16            8.16
-    ## 6 1503960366    4/17/2016       9705          6.48            6.48
-    ##   LoggedActivitiesDistance VeryActiveDistance ModeratelyActiveDistance
-    ## 1                        0               1.88                     0.55
-    ## 2                        0               1.57                     0.69
-    ## 3                        0               2.44                     0.40
-    ## 4                        0               2.14                     1.26
-    ## 5                        0               2.71                     0.41
-    ## 6                        0               3.19                     0.78
-    ##   LightActiveDistance SedentaryActiveDistance VeryActiveMinutes
-    ## 1                6.06                       0                25
-    ## 2                4.71                       0                21
-    ## 3                3.91                       0                30
-    ## 4                2.83                       0                29
-    ## 5                5.04                       0                36
-    ## 6                2.51                       0                38
-    ##   FairlyActiveMinutes LightlyActiveMinutes SedentaryMinutes Calories
-    ## 1                  13                  328              728     1985
-    ## 2                  19                  217              776     1797
-    ## 3                  11                  181             1218     1776
-    ## 4                  34                  209              726     1745
-    ## 5                  10                  221              773     1863
-    ## 6                  20                  164              539     1728
+    ## 'data.frame':    940 obs. of  15 variables:
+    ##  $ Id                      : num  1.5e+09 1.5e+09 1.5e+09 1.5e+09 1.5e+09 ...
+    ##  $ ActivityDate            : chr  "4/12/2016" "4/13/2016" "4/14/2016" "4/15/2016" ...
+    ##  $ TotalSteps              : int  13162 10735 10460 9762 12669 9705 13019 15506 10544 9819 ...
+    ##  $ TotalDistance           : num  8.5 6.97 6.74 6.28 8.16 ...
+    ##  $ TrackerDistance         : num  8.5 6.97 6.74 6.28 8.16 ...
+    ##  $ LoggedActivitiesDistance: num  0 0 0 0 0 0 0 0 0 0 ...
+    ##  $ VeryActiveDistance      : num  1.88 1.57 2.44 2.14 2.71 ...
+    ##  $ ModeratelyActiveDistance: num  0.55 0.69 0.4 1.26 0.41 ...
+    ##  $ LightActiveDistance     : num  6.06 4.71 3.91 2.83 5.04 ...
+    ##  $ SedentaryActiveDistance : num  0 0 0 0 0 0 0 0 0 0 ...
+    ##  $ VeryActiveMinutes       : int  25 21 30 29 36 38 42 50 28 19 ...
+    ##  $ FairlyActiveMinutes     : int  13 19 11 34 10 20 16 31 12 8 ...
+    ##  $ LightlyActiveMinutes    : int  328 217 181 209 221 164 233 264 205 211 ...
+    ##  $ SedentaryMinutes        : int  728 776 1218 726 773 539 1149 775 818 838 ...
+    ##  $ Calories                : int  1985 1797 1776 1745 1863 1728 1921 2035 1786 1775 ...
 
 ``` r
-head(calories)
+str(calories)
 ```
 
-    ##           Id          ActivityHour Calories
-    ## 1 1503960366 4/12/2016 12:00:00 AM       81
-    ## 2 1503960366  4/12/2016 1:00:00 AM       61
-    ## 3 1503960366  4/12/2016 2:00:00 AM       59
-    ## 4 1503960366  4/12/2016 3:00:00 AM       47
-    ## 5 1503960366  4/12/2016 4:00:00 AM       48
-    ## 6 1503960366  4/12/2016 5:00:00 AM       48
+    ## 'data.frame':    22099 obs. of  3 variables:
+    ##  $ Id          : num  1.5e+09 1.5e+09 1.5e+09 1.5e+09 1.5e+09 ...
+    ##  $ ActivityHour: chr  "4/12/2016 12:00:00 AM" "4/12/2016 1:00:00 AM" "4/12/2016 2:00:00 AM" "4/12/2016 3:00:00 AM" ...
+    ##  $ Calories    : int  81 61 59 47 48 48 48 47 68 141 ...
 
 ``` r
-head(activity)
+str(intensities)
 ```
 
-    ##           Id ActivityDate TotalSteps TotalDistance TrackerDistance
-    ## 1 1503960366    4/12/2016      13162          8.50            8.50
-    ## 2 1503960366    4/13/2016      10735          6.97            6.97
-    ## 3 1503960366    4/14/2016      10460          6.74            6.74
-    ## 4 1503960366    4/15/2016       9762          6.28            6.28
-    ## 5 1503960366    4/16/2016      12669          8.16            8.16
-    ## 6 1503960366    4/17/2016       9705          6.48            6.48
-    ##   LoggedActivitiesDistance VeryActiveDistance ModeratelyActiveDistance
-    ## 1                        0               1.88                     0.55
-    ## 2                        0               1.57                     0.69
-    ## 3                        0               2.44                     0.40
-    ## 4                        0               2.14                     1.26
-    ## 5                        0               2.71                     0.41
-    ## 6                        0               3.19                     0.78
-    ##   LightActiveDistance SedentaryActiveDistance VeryActiveMinutes
-    ## 1                6.06                       0                25
-    ## 2                4.71                       0                21
-    ## 3                3.91                       0                30
-    ## 4                2.83                       0                29
-    ## 5                5.04                       0                36
-    ## 6                2.51                       0                38
-    ##   FairlyActiveMinutes LightlyActiveMinutes SedentaryMinutes Calories
-    ## 1                  13                  328              728     1985
-    ## 2                  19                  217              776     1797
-    ## 3                  11                  181             1218     1776
-    ## 4                  34                  209              726     1745
-    ## 5                  10                  221              773     1863
-    ## 6                  20                  164              539     1728
+    ## 'data.frame':    22099 obs. of  4 variables:
+    ##  $ Id              : num  1.5e+09 1.5e+09 1.5e+09 1.5e+09 1.5e+09 ...
+    ##  $ ActivityHour    : chr  "4/12/2016 12:00:00 AM" "4/12/2016 1:00:00 AM" "4/12/2016 2:00:00 AM" "4/12/2016 3:00:00 AM" ...
+    ##  $ TotalIntensity  : int  20 8 7 0 0 0 0 0 13 30 ...
+    ##  $ AverageIntensity: num  0.333 0.133 0.117 0 0 ...
 
 ``` r
-head(sleep)
+str(activity)
 ```
 
-    ##           Id              SleepDay TotalSleepRecords TotalMinutesAsleep
-    ## 1 1503960366 4/12/2016 12:00:00 AM                 1                327
-    ## 2 1503960366 4/13/2016 12:00:00 AM                 2                384
-    ## 3 1503960366 4/15/2016 12:00:00 AM                 1                412
-    ## 4 1503960366 4/16/2016 12:00:00 AM                 2                340
-    ## 5 1503960366 4/17/2016 12:00:00 AM                 1                700
-    ## 6 1503960366 4/19/2016 12:00:00 AM                 1                304
-    ##   TotalTimeInBed
-    ## 1            346
-    ## 2            407
-    ## 3            442
-    ## 4            367
-    ## 5            712
-    ## 6            320
+    ## 'data.frame':    940 obs. of  15 variables:
+    ##  $ Id                      : num  1.5e+09 1.5e+09 1.5e+09 1.5e+09 1.5e+09 ...
+    ##  $ ActivityDate            : chr  "4/12/2016" "4/13/2016" "4/14/2016" "4/15/2016" ...
+    ##  $ TotalSteps              : int  13162 10735 10460 9762 12669 9705 13019 15506 10544 9819 ...
+    ##  $ TotalDistance           : num  8.5 6.97 6.74 6.28 8.16 ...
+    ##  $ TrackerDistance         : num  8.5 6.97 6.74 6.28 8.16 ...
+    ##  $ LoggedActivitiesDistance: num  0 0 0 0 0 0 0 0 0 0 ...
+    ##  $ VeryActiveDistance      : num  1.88 1.57 2.44 2.14 2.71 ...
+    ##  $ ModeratelyActiveDistance: num  0.55 0.69 0.4 1.26 0.41 ...
+    ##  $ LightActiveDistance     : num  6.06 4.71 3.91 2.83 5.04 ...
+    ##  $ SedentaryActiveDistance : num  0 0 0 0 0 0 0 0 0 0 ...
+    ##  $ VeryActiveMinutes       : int  25 21 30 29 36 38 42 50 28 19 ...
+    ##  $ FairlyActiveMinutes     : int  13 19 11 34 10 20 16 31 12 8 ...
+    ##  $ LightlyActiveMinutes    : int  328 217 181 209 221 164 233 264 205 211 ...
+    ##  $ SedentaryMinutes        : int  728 776 1218 726 773 539 1149 775 818 838 ...
+    ##  $ Calories                : int  1985 1797 1776 1745 1863 1728 1921 2035 1786 1775 ...
+
+``` r
+str(sleep)
+```
+
+    ## 'data.frame':    413 obs. of  5 variables:
+    ##  $ Id                : num  1.5e+09 1.5e+09 1.5e+09 1.5e+09 1.5e+09 ...
+    ##  $ SleepDay          : chr  "4/12/2016 12:00:00 AM" "4/13/2016 12:00:00 AM" "4/15/2016 12:00:00 AM" "4/16/2016 12:00:00 AM" ...
+    ##  $ TotalSleepRecords : int  1 2 1 2 1 1 1 1 1 1 ...
+    ##  $ TotalMinutesAsleep: int  327 384 412 340 700 304 360 325 361 430 ...
+    ##  $ TotalTimeInBed    : int  346 407 442 367 712 320 377 364 384 449 ...
 
 I spotted some problems with the time stamp data. So before analysis, I
 need to convert it to date time format and split to date and time.
@@ -389,76 +364,109 @@ Key findings from the summary include:
     mortality, while 12,000 steps daily reduces the risk by 65% compared
     to 4,000 steps.
 
-### Merging Data
+### Cleaing, adding and merging Datasets
+
+Checking for duplicates
 
 ``` r
-merged_data <- merge(sleep, activity, by=c('Id', 'date'))
-head(merged_data)
+activity[duplicated(activity[,1:2]),]
 ```
 
-    ##           Id     date   SleepDay TotalSleepRecords TotalMinutesAsleep
-    ## 1 1503960366 04/12/16 2016-04-12                 1                327
-    ## 2 1503960366 04/13/16 2016-04-13                 2                384
-    ## 3 1503960366 04/15/16 2016-04-15                 1                412
-    ## 4 1503960366 04/16/16 2016-04-16                 2                340
-    ## 5 1503960366 04/17/16 2016-04-17                 1                700
-    ## 6 1503960366 04/19/16 2016-04-19                 1                304
-    ##   TotalTimeInBed ActivityDate TotalSteps TotalDistance TrackerDistance
-    ## 1            346   2016-04-12      13162          8.50            8.50
-    ## 2            407   2016-04-13      10735          6.97            6.97
-    ## 3            442   2016-04-15       9762          6.28            6.28
-    ## 4            367   2016-04-16      12669          8.16            8.16
-    ## 5            712   2016-04-17       9705          6.48            6.48
-    ## 6            320   2016-04-19      15506          9.88            9.88
-    ##   LoggedActivitiesDistance VeryActiveDistance ModeratelyActiveDistance
-    ## 1                        0               1.88                     0.55
-    ## 2                        0               1.57                     0.69
-    ## 3                        0               2.14                     1.26
-    ## 4                        0               2.71                     0.41
-    ## 5                        0               3.19                     0.78
-    ## 6                        0               3.53                     1.32
-    ##   LightActiveDistance SedentaryActiveDistance VeryActiveMinutes
-    ## 1                6.06                       0                25
-    ## 2                4.71                       0                21
-    ## 3                2.83                       0                29
-    ## 4                5.04                       0                36
-    ## 5                2.51                       0                38
-    ## 6                5.03                       0                50
-    ##   FairlyActiveMinutes LightlyActiveMinutes SedentaryMinutes Calories
-    ## 1                  13                  328              728     1985
-    ## 2                  19                  217              776     1797
-    ## 3                  34                  209              726     1745
-    ## 4                  10                  221              773     1863
-    ## 5                  20                  164              539     1728
-    ## 6                  31                  264              775     2035
+    ##  [1] Id                       ActivityDate             TotalSteps              
+    ##  [4] TotalDistance            TrackerDistance          LoggedActivitiesDistance
+    ##  [7] VeryActiveDistance       ModeratelyActiveDistance LightActiveDistance     
+    ## [10] SedentaryActiveDistance  VeryActiveMinutes        FairlyActiveMinutes     
+    ## [13] LightlyActiveMinutes     SedentaryMinutes         Calories                
+    ## [16] date                    
+    ## <0 rows> (or 0-length row.names)
+
+There are some rows with 0 steps in activity dataset, meaning the user
+was inactive that day or was not wearing their device
+
+``` r
+filtered_activity <- activity %>%
+    filter(activity$TotalSteps!=0)
+```
+
+Filtering sleepDay data
+
+``` r
+filtered_sleep<- separate(sleep, SleepDay, into=c('ActivityDate','Time'),sep=' ')
+```
+
+    ## Warning: Expected 2 pieces. Missing pieces filled with `NA` in 413 rows [1, 2, 3, 4, 5,
+    ## 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, ...].
+
+``` r
+combined_data<- merge(x=filtered_activity, y=filtered_sleep, by=c("Id","ActivityDate"), all=TRUE)
+combined_data_inner<- merge(x=filtered_activity, y=filtered_sleep, by=c("Id","ActivityDate"))
+n_distinct(combined_data$Id)
+```
+
+    ## [1] 33
+
+``` r
+n_distinct(combined_data_inner$Id)
+```
+
+    ## [1] 24
+
+Adding a weekday column
+
+``` r
+combined_data_v2 <- combined_data %>% mutate( Weekday = weekdays(as.Date(ActivityDate, "%m/%d/%Y")))
+```
+
+    ## Warning: There was 1 warning in `mutate()`.
+    ## ℹ In argument: `Weekday = weekdays(as.Date(ActivityDate, "%m/%d/%Y"))`.
+    ## Caused by warning in `as.POSIXlt.POSIXct()`:
+    ## ! unknown timezone '%m/%d/%Y'
+
+``` r
+View(combined_data_v2)
+```
+
+### Analysis usage pattern
+
+Customers usage of Beallbeat Smart Products
+
+For customers segmentation based on usage level of Bellabeat smart
+product consider the following categories: • Low Use : 1 to 10 Days •
+Moderate Use : 11 to 20 Days • High Use : More than 21 Days
 
 ### Visualization
 
 ``` r
-ggplot(data=activity, aes(x=TotalSteps, y=Calories)) + 
-  geom_point(color='darkblue') + geom_smooth(color='darkcyan') + labs(title="Total Steps vs. Calories")
+ggplot(data=combined_data_v2, aes(x=Calories, y=TotalSteps)) +
+  geom_point(color='darkblue') +
+  geom_smooth(color='darkcyan')+
+  labs (title= "Steps Vs Calories Burned", x= "Calories Burned", y= "Total Steps")
 ```
 
     ## `geom_smooth()` using method = 'loess' and formula = 'y ~ x'
 
-![](img/unnamed-chunk-15-1.png)
+![](img/unnamed-chunk-18-1.png)
 
 I observe a positive correlation between total steps and calories, which
 is expected – increased activity leads to higher calorie expenditure.
 
+**“More Steps = More Calories”**
+
+**Bellabeat can incentivise users to hit a step goal per day.**
+
 ``` r
-ggplot(data=sleep, aes(x=TotalMinutesAsleep, y=TotalTimeInBed)) + 
-  geom_point(color='darkblue')+ geom_smooth(color='darkcyan') + 
-  labs(title="Total Minutes Asleep vs. Total Time in Bed")
+daily<- factor(combined_data_v2$Weekday, levels = c("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday")) 
+
+ggplot(data = combined_data_v2) +
+  geom_bar(stat='identity', mapping=aes(x= daily, y= TotalSteps, fill=daily)) +
+  labs(title="Total Steps By Weekday", x= "Day", y= "Total Steps")
 ```
 
-    ## `geom_smooth()` using method = 'loess' and formula = 'y ~ x'
+![](img/unnamed-chunk-19-1.png)
+Shows that most data is collected / most active Tuesday - Thursday
 
-![](img/unnamed-chunk-16-1.png)
-
-The relationship between total minutes asleep and total time in bed
-appears linear. To help Bellabeat users improve their sleep, we should
-consider sending notifications to remind them to go to bed.
+**Bellabeat can create incentives for users to wear their products
+everyday.**
 
 ``` r
 int_new <- intensities %>%
@@ -474,27 +482,59 @@ ggplot(data=int_new, aes(x=time, y=mean_total_int)) + geom_histogram(stat = "ide
     ## Warning in geom_histogram(stat = "identity", fill = "darkcyan"): Ignoring
     ## unknown parameters: `binwidth`, `bins`, and `pad`
 
-![](img/unnamed-chunk-17-1.png)
+![](img/unnamed-chunk-20-1.png)
 
 After visualizing total intensity hourly, I discovered that people are
 more active between 5 AM and 10 PM. The peak activity period is between
 5 PM and 7 PM, likely due to people going to the gym or for a walk after
-work. We can use this time in the Bellabeat app to send reminders and
-motivate users to go for a run or walk.
+work.
+
+**Bellabeat can use this time in the Bellabeat app to send reminders and
+motivate users to go for a run or walk.**
 
 ``` r
-ggplot(data=merged_data, aes(x=TotalMinutesAsleep, y=SedentaryMinutes)) + 
+ggplot(data=combined_data_v2, aes(x=TotalMinutesAsleep, y=TotalTimeInBed)) + 
+  geom_point(color='darkblue')+ geom_smooth(color='darkcyan') + 
+  labs(title="Total Minutes Asleep vs. Total Time in Bed")
+```
+
+    ## `geom_smooth()` using method = 'loess' and formula = 'y ~ x'
+
+    ## Warning: Removed 453 rows containing non-finite outside the scale range
+    ## (`stat_smooth()`).
+
+    ## Warning: Removed 453 rows containing missing values or values outside the scale range
+    ## (`geom_point()`).
+
+![](img/unnamed-chunk-21-1.png)
+
+The relationship between total minutes asleep and total time in bed
+appears linear.
+
+**To help Bellabeat users improve their sleep, we should consider
+sending notifications to remind them to go to bed.**
+
+``` r
+ggplot(data=combined_data_v2, aes(x=TotalMinutesAsleep, y=SedentaryMinutes)) + 
   geom_point(color='darkblue') + geom_smooth(color='darkcyan') +
   labs(title="Minutes Asleep vs. Sedentary Minutes")
 ```
 
     ## `geom_smooth()` using method = 'loess' and formula = 'y ~ x'
 
-![](img/unnamed-chunk-18-1.png)
+    ## Warning: Removed 453 rows containing non-finite outside the scale range
+    ## (`stat_smooth()`).
+
+    ## Warning: Removed 453 rows containing missing values or values outside the scale range
+    ## (`geom_point()`).
+
+![](img/unnamed-chunk-22-1.png)
 
 We can observe a clear inverse correlation between Sedentary Minutes and
-Sleep Time. To enhance sleep quality, the Bellabeat app could suggest
-reducing sedentary behavior.
+Sleep Time.
+
+**To enhance sleep quality, the Bellabeat app could suggest reducing
+sedentary behavior.**
 
 ### Recommendations for the business
 
